@@ -1,10 +1,11 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-
+import cors from "cors";
 const prisma = new PrismaClient();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 const PORT = 3000;
 
 // get all todos
@@ -22,16 +23,16 @@ app.get("/", async (req, res) => {
 app.post("/todo", async (req, res) => {
   const { title } = req.body;
   try {
-    await prisma.todo.create({
+    const todo = await prisma.todo.create({
       data: {
         title: title,
       },
     });
+    res.status(200).json({ todo });
   } catch (error) {
     console.error(error);
     res.status(404).json({ message: "error creating todo" });
   }
-  res.status(200).json({ message: "todo created" });
 });
 
 //update todo
