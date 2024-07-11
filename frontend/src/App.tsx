@@ -12,7 +12,7 @@ function App() {
   const [todos, setTodos] = useState<todo[]>([]);
   useEffect(() => {
     async function getTodos() {
-      const { data } = await axios.get("http://13.233.105.2:3000/");
+      const { data } = await axios.get("https://13.233.105.2:3000/");
       const todosReq = data.todos;
       setTodos([...todosReq]);
     }
@@ -22,7 +22,7 @@ function App() {
     setTitle(e.target.value);
   };
   const handleAddClick = async () => {
-    const { data } = await axios.post("http://13.233.105.2:3000/todo", {
+    const { data } = await axios.post("https://13.233.105.2:3000/todo", {
       title,
     });
     setTodos([
@@ -68,7 +68,7 @@ function Todo({
   todos: any;
 }) {
   async function handleDeleteTodo() {
-    await axios.delete(`http://13.233.105.2:3000/todo/${todo.id}`);
+    await axios.delete(`https://13.233.105.2:3000/todo/${todo.id}`);
     setTodos(todos.filter((t: { id: number }) => t.id !== todo.id));
   }
   async function handleCompleteTodo() {
@@ -81,7 +81,7 @@ function Todo({
       }
     });
     setTodos(updateTodos);
-    await axios.put(`http://13.233.105.2:3000/todo/`, {
+    await axios.put(`https://13.233.105.2:3000/todo/`, {
       id: todo.id,
       complete: !todo.complete,
     });
