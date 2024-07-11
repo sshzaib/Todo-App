@@ -70,6 +70,7 @@ function Todo({
     setTodos(todos.filter((t: { id: number }) => t.id !== todo.id));
   }
   async function handleCompleteTodo() {
+    //@ts-ignore
     const updateTodos = todos.map((t) => {
       if (t.id == todo.id) {
         return { ...t, complete: !t.complete };

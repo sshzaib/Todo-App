@@ -1,0 +1,36 @@
+version: "1"
+
+services:
+  todo-frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - todo-backend
+
+  todo-backend:
+    container_name: backend
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - ./backend/.env
+
+  db:
+    container_name: pg_db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
