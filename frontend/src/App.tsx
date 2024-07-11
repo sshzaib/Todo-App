@@ -12,7 +12,7 @@ function App() {
   const [todos, setTodos] = useState<todo[]>([]);
   useEffect(() => {
     async function getTodos() {
-      const { data } = await axios.get("https://13.233.105.2:3000/");
+      const { data } = await axios.get("https://todo.api.100xdevprojects.com/");
       const todosReq = data.todos;
       setTodos([...todosReq]);
     }
@@ -22,9 +22,12 @@ function App() {
     setTitle(e.target.value);
   };
   const handleAddClick = async () => {
-    const { data } = await axios.post("https://13.233.105.2:3000/todo", {
-      title,
-    });
+    const { data } = await axios.post(
+      "https://todo.api.100xdevprojects.com/todo",
+      {
+        title,
+      },
+    );
     setTodos([
       { id: data.todo.id, title: data.todo.title, complete: false },
       ...todos,
@@ -68,7 +71,7 @@ function Todo({
   todos: any;
 }) {
   async function handleDeleteTodo() {
-    await axios.delete(`https://13.233.105.2:3000/todo/${todo.id}`);
+    await axios.delete(`https://todo.api.100xdevprojects.com/todo/${todo.id}`);
     setTodos(todos.filter((t: { id: number }) => t.id !== todo.id));
   }
   async function handleCompleteTodo() {
@@ -81,7 +84,7 @@ function Todo({
       }
     });
     setTodos(updateTodos);
-    await axios.put(`https://13.233.105.2:3000/todo/`, {
+    await axios.put(`https://todo.api.100xdevprojects.com/todo/`, {
       id: todo.id,
       complete: !todo.complete,
     });
