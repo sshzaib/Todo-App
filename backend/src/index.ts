@@ -37,16 +37,18 @@ app.post("/todo", async (req, res) => {
 
 //update todo
 app.put("/todo", async (req, res) => {
-  const { id, title } = req.body;
+  const { id, title, complete } = req.body;
   try {
-    await prisma.todo.update({
+    const todo = await prisma.todo.update({
       data: {
         title,
+        complete: complete,
       },
       where: {
         id: Number(id),
       },
     });
+    console.log(todo);
     res.status(200).json({ message: "todo updated" });
   } catch (error) {
     console.error(error);
@@ -55,8 +57,8 @@ app.put("/todo", async (req, res) => {
 });
 
 //delete todo
-app.delete("/todo", async (req, res) => {
-  const { id } = req.body;
+app.delete("/todo/:id", async (req, res) => {
+  const { id } = req.params;
   try {
     await prisma.todo.delete({
       where: {

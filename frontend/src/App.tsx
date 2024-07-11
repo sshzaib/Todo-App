@@ -24,33 +24,74 @@ function App() {
   const handleAddClick = async () => {
     const { data } = await axios.post("http://localhost:3000/todo", { title });
     setTodos([
-      ...todos,
       { id: data.todo.id, title: data.todo.title, complete: false },
+      ...todos,
     ]);
     setTitle("");
   };
   return (
     <>
-      <input value={title} onChange={handleInput} />
-      <button onClick={handleAddClick}>Add</button>
-      <div>
-        {todos &&
-          todos.map((todo) => {
-            return <Todo todo={todo} key={todo.id} />;
-          })}
+      <div className="flex justify-center items-center flex-col w-full h-screen">
+        <div>
+          <input value={title} onChange={handleInput} className="pl-2 border" />
+          <button onClick={handleAddClick} className=" ml-4 border">
+            Add
+          </button>
+        </div>
+        <div>
+          {todos &&
+            todos.map((todo) => {
+              return (
+                <Todo
+                  todo={todo}
+                  key={todo.id}
+                  setTodos={setTodos}
+                  todos={todos}
+                />
+              );
+            })}
+        </div>
       </div>
     </>
   );
 }
 
-function Todo({ todo }: { todo: any }) {
+function Todo({
+  todo,
+  setTodos,
+  todos,
+}: {
+  todo: any;
+  setTodos: any;
+  todos: any;
+}) {
+  async function handleDeleteTodo() {
+    await axios.delete(`http://localhost:3000/todo/${todo.id}`);
+    setTodos(todos.filter((t: { id: number }) => t.id !== todo.id));
+  }
+  async function handleCompleteTodo() {
+    const updateTodos = todos.map((t) => {
+      if (t.id == todo.id) {
+        return { ...t, complete: !t.complete };
+      } else {
+        return t;
+      }
+    });
+    setTodos(updateTodos);
+    await axios.put(`http://localhost:3000/todo/`, {
+      id: todo.id,
+      complete: !todo.complete,
+    });
+  }
+
   return (
     <>
-      <div>
-        <input type="checkbox" />
-        {todo.title}
-        <button>Edit</button>
-        <button>Delete</button>
+      <div className="flex">
+        <input type="checkbox" onClick={handleCompleteTodo} />
+        <div className={todo.complete ? `line-through` : ``}>{todo.title}</div>
+        <button onClick={handleDeleteTodo} className="ml-4 border rounder-full">
+          Delete
+        </button>
       </div>
     </>
   );
