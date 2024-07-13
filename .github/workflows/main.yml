@@ -33,3 +33,22 @@ jobs:
           platforms: linux/amd64,linux/arm64/v8
           push: true
           tags: ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+      - name: Deploy to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.EC2_HOST }}
+          REMOTE_USER: ${{ secrets.EC2_USER }}
+        run: |
+          # Save the private key to a file and set the correct permissions
+          echo "$PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+
+          # Connect to the EC2 instance and run the commands to pull and run the Docker image
+          ssh -o StrictHostKeyChecking=no -i key.pem $REMOTE_USER@$REMOTE_HOST << 'EOF'
+            docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+            docker stop my_container || true
+            docker rm my_container || true
+            docker run -d --name my_container ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+EOF
+          # Remove the private key file
+          rm key.pem
