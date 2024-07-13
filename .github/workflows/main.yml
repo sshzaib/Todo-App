@@ -48,7 +48,7 @@ jobs:
             docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
             docker stop my_container || true
             docker rm my_container || true
-            docker run -d --name my_container ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
-EOF
+            docker run -d --name my_container ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest 
+            EOF
           # Remove the private key file
           rm key.pem
