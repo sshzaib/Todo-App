@@ -50,7 +50,7 @@ jobs:
             docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
             docker stop my_container || true
             docker rm my_container || true
-          docker run -d -p 3000:3000 --name my_container -e DATABASE_URL='${{ secrets.DATABASE_URL }}' DIRECT_URL='${{ secrets.DIRECT_URL }}' ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest 
+          docker run -d -p 3000:3000 --name my_container -e DATABASE_URL="${{ secrets.DATABASE_URL }}" DIRECT_URL="${{ secrets.DIRECT_URL }}" ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest 
           EOF
           # Remove the private key file
           rm key.pem
