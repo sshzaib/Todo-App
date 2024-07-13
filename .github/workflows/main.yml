@@ -44,11 +44,11 @@ jobs:
           chmod 600 key.pem
 
           # Connect to the EC2 instance and run the commands to pull and run the Docker image
-          ssh -o StrictHostKeyChecking=no -i key.pem $REMOTE_USER@$REMOTE_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i key.pem $REMOTE_USER@$REMOTE_HOST << EOF
             docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
             docker stop my_container || true
             docker rm my_container || true
             docker run -d --name my_container ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest 
-            EOF
+          EOF
           # Remove the private key file
           rm key.pem
