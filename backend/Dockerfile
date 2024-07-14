@@ -9,4 +9,5 @@ RUN yarn
 COPY . .
 
 RUN npx prisma generate
+
 CMD ["yarn", "dev"]

@@ -13,6 +13,7 @@ const PORT = 3000;
 app.get("/", async (req, res) => {
   try {
     const todos = await prisma.todo.findMany();
+    console.log("lets go");
     res.status(200).json({ todos });
   } catch (error) {
     console.error(error);
