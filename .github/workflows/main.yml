@@ -47,10 +47,10 @@ jobs:
 
           # Connect to the EC2 instance and run the commands to pull and run the Docker image
           ssh -o StrictHostKeyChecking=no -i key.pem $REMOTE_USER@$REMOTE_HOST << EOF
-            docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
-            docker stop my_container || true
-            docker rm my_container || true
-          docker run -d -p 3000:3000 --name my_container -e DATABASE_URL="${{ secrets.DATABASE_URL }}" DIRECT_URL="${{ secrets.DIRECT_URL }}" ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest 
+          sudo docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+          sudo docker stop my_container || true
+          sudo docker rm my_container || true
+          sudo docker run -d -p 3000:3000 --name my_container -e DATABASE_URL="${{ secrets.DATABASE_URL }}" DIRECT_URL="${{ secrets.DIRECT_URL }}" ${{ vars.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest 
           EOF
           # Remove the private key file
           rm key.pem
